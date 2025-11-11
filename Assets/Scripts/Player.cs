@@ -4,7 +4,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public CapsuleCollider2D capsuleCollider { get; private set; }
-    public PlayerMovement movement { get; private set; }
+    //public PlayerMovement movement { get; private set; }
+    public MarioAgent movement { get; private set; }
+
     public DeathAnimation deathAnimation { get; private set; }
 
     public PlayerSpriteRenderer smallRenderer;
@@ -18,7 +20,8 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         capsuleCollider = GetComponent<CapsuleCollider2D>();
-        movement = GetComponent<PlayerMovement>();
+        //movement = GetComponent<PlayerMovement>();
+        movement = GetComponent<MarioAgent>();
         deathAnimation = GetComponent<DeathAnimation>();
         activeRenderer = smallRenderer;
     }
