@@ -32,7 +32,9 @@ public class Player : MonoBehaviour
         {
             if (big) {
                 Shrink();
+                movement.AddReward(-0.5f);
             } else {
+                movement.AddReward(-1f);
                 Death();
             }
         }

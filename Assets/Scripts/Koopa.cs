@@ -12,11 +12,16 @@ public class Koopa : MonoBehaviour
     {
         if (!shelled && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player player))
         {
-            if (player.starpower) {
-                Hit();
-            } else if (collision.transform.DotTest(transform, Vector2.down)) {
+            if (player.starpower) 
+            {
+                Hit(collision.gameObject);
+            } 
+            else if (collision.transform.DotTest(transform, Vector2.down)) 
+            {
                 EnterShell();
-            }  else {
+            }  
+            else 
+            {
                 player.Hit();
             }
         }
@@ -33,16 +38,19 @@ public class Koopa : MonoBehaviour
             }
             else
             {
-                if (player.starpower) {
-                    Hit();
-                } else {
+                if (player.starpower) 
+                {
+                    Hit(other.gameObject);
+                } 
+                else 
+                {
                     player.Hit();
                 }
             }
         }
         else if (!shelled && other.gameObject.layer == LayerMask.NameToLayer("Shell"))
         {
-            Hit();
+            Hit(other.gameObject);
         }
     }
 
@@ -69,8 +77,9 @@ public class Koopa : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Shell");
     }
 
-    private void Hit()
+    private void Hit(GameObject player)
     {
+        player.GetComponent<MarioAgent>().AddReward(0.5f);
         GetComponent<AnimatedSprite>().enabled = false;
         GetComponent<DeathAnimation>().enabled = true;
         Destroy(gameObject, 3f);
@@ -78,7 +87,8 @@ public class Koopa : MonoBehaviour
 
     private void OnBecameInvisible()
     {
-        if (pushed) {
+        if (pushed) 
+        {
             Destroy(gameObject);
         }
     }

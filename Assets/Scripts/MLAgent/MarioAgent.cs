@@ -25,12 +25,30 @@ public class MarioAgent : Agent
     public bool running => Mathf.Abs(velocity.x) > 0.25f || Mathf.Abs(inputAxis) > 0.25f;
     public bool sliding => (inputAxis > 0f && velocity.x < 0f) || (inputAxis < 0f && velocity.x > 0f);
     public bool falling => velocity.y < 0f && !grounded;
+    public bool jumpPressed = false;
 
     private void Awake()
     {
         mainCamera = Camera.main;
         rb = GetComponent<Rigidbody2D>();
         capsuleCollider = GetComponent<Collider2D>();
+    }
+
+    new private void OnEnable()
+    {
+        rb.isKinematic = false;
+        capsuleCollider.enabled = true;
+        velocity = Vector2.zero;
+        jumping = false;
+    }
+
+    new private void OnDisable()
+    {
+        rb.isKinematic = true;
+        capsuleCollider.enabled = false;
+        velocity = Vector2.zero;
+        inputAxis = 0f;
+        jumping = false;
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -56,98 +74,97 @@ public class MarioAgent : Agent
         sensor.AddObservation(Physics2D.Raycast(transform.position, new Vector2(1, 1), rayDistance).distance);
     }
 
-    new private void OnEnable()
+    public override void OnActionReceived(ActionBuffers actions)
     {
-        rb.isKinematic = false;
-        capsuleCollider.enabled = true;
-        velocity = Vector2.zero;
-        jumping = false;
+        int move = actions.DiscreteActions[0];   // 0,1,2
+        int jump = actions.DiscreteActions[1];   // 0,1
+
+        HorizontalMovement(move switch { 1 => -1f, 2 => 1f, _ => 0f });
+
+        jumpPressed = jump == 1;
+        if (grounded)
+            GroundedMovement(jumpPressed);
+
+        // Small living penalty + forward reward
+        AddReward(-0.001f + transform.position.x * 0.005f);
     }
 
-    new private void OnDisable()
+
+    private void Update()
     {
-        rb.isKinematic = true;
-        capsuleCollider.enabled = false;
-        velocity = Vector2.zero;
-        inputAxis = 0f;
-        jumping = false;
+        //HorizontalMovement();
+
+        grounded = rb.Raycast(Vector2.down);
+
+        //if (grounded)
+        //{
+        //    GroundedMovement();
+        //}
+
+        ApplyGravity();
     }
 
-    //private void Update()
-    //{
-    //    HorizontalMovement();
+    private void FixedUpdate()
+    {
+        // Move mario based on his velocity
+        Vector2 position = rb.position;
+        position += velocity * Time.fixedDeltaTime;
 
-    //    grounded = rb.Raycast(Vector2.down);
+        // Clamp within the screen bounds
+        Vector2 leftEdge = mainCamera.ScreenToWorldPoint(Vector2.zero);
+        Vector2 rightEdge = mainCamera.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        position.x = Mathf.Clamp(position.x, leftEdge.x + 0.5f, rightEdge.x - 0.5f);
 
-    //    if (grounded)
-    //    {
-    //        GroundedMovement();
-    //    }
+        rb.MovePosition(position);
+    }
 
-    //    ApplyGravity();
-    //}
+    private void HorizontalMovement(float axis)
+    {
+        // Accelerate / decelerate
+        inputAxis = axis;
+        velocity.x = Mathf.MoveTowards(velocity.x, inputAxis * moveSpeed, moveSpeed * Time.deltaTime);
 
-    //private void FixedUpdate()
-    //{
-    //    // Move mario based on his velocity
-    //    Vector2 position = rb.position;
-    //    position += velocity * Time.fixedDeltaTime;
+        // Check if running into a wall
+        if (rb.Raycast(Vector2.right * velocity.x))
+        {
+            velocity.x = 0f;
+        }
 
-    //    // Clamp within the screen bounds
-    //    Vector2 leftEdge = mainCamera.ScreenToWorldPoint(Vector2.zero);
-    //    Vector2 rightEdge = mainCamera.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-    //    position.x = Mathf.Clamp(position.x, leftEdge.x + 0.5f, rightEdge.x - 0.5f);
+        // Flip sprite to face direction
+        if (velocity.x > 0f)
+        {
+            transform.eulerAngles = Vector3.zero;
+        }
+        else if (velocity.x < 0f)
+        {
+            transform.eulerAngles = new Vector3(0f, 180f, 0f);
+        }
+    }
 
-    //    rb.MovePosition(position);
-    //}
+    private void GroundedMovement(bool jump)
+    {
+        // Prevent gravity from infinitly building up
+        velocity.y = Mathf.Max(velocity.y, 0f);
+        jumping = velocity.y > 0f;
 
-    //private void HorizontalMovement()
-    //{
-    //    // Accelerate / decelerate
-    //    inputAxis = Input.GetAxis("Horizontal");
-    //    velocity.x = Mathf.MoveTowards(velocity.x, inputAxis * moveSpeed, moveSpeed * Time.deltaTime);
+        // Perform jump
+        if (jump)
+        {
+            velocity.y = jumpForce;
+            jumping = true;
+        }
+    }
 
-    //    // Check if running into a wall
-    //    if (rb.Raycast(Vector2.right * velocity.x))
-    //    {
-    //        velocity.x = 0f;
-    //    }
+    private void ApplyGravity()
+    {
+        // Check if falling
+        bool falling = velocity.y < 0f || !jumpPressed;
+        float multiplier = falling ? 2f : 1f;
 
-    //    // Flip sprite to face direction
-    //    if (velocity.x > 0f)
-    //    {
-    //        transform.eulerAngles = Vector3.zero;
-    //    }
-    //    else if (velocity.x < 0f)
-    //    {
-    //        transform.eulerAngles = new Vector3(0f, 180f, 0f);
-    //    }
-    //}
-
-    //private void GroundedMovement()
-    //{
-    //    // Prevent gravity from infinitly building up
-    //    velocity.y = Mathf.Max(velocity.y, 0f);
-    //    jumping = velocity.y > 0f;
-
-    //    // Perform jump
-    //    if (Input.GetButtonDown("Jump"))
-    //    {
-    //        velocity.y = jumpForce;
-    //        jumping = true;
-    //    }
-    //}
-
-    //private void ApplyGravity()
-    //{
-    //    // Check if falling
-    //    bool falling = velocity.y < 0f || !Input.GetButton("Jump");
-    //    float multiplier = falling ? 2f : 1f;
-
-    //    // Apply gravity and terminal velocity
-    //    velocity.y += gravity * multiplier * Time.deltaTime;
-    //    velocity.y = Mathf.Max(velocity.y, gravity / 2f);
-    //}
+        // Apply gravity and terminal velocity
+        velocity.y += gravity * multiplier * Time.deltaTime;
+        velocity.y = Mathf.Max(velocity.y, gravity / 2f);
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

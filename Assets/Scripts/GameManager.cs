@@ -70,9 +70,12 @@ public class GameManager : MonoBehaviour
     {
         lives--;
 
-        if (lives > 0) {
+        if (lives > 0) 
+        {
             LoadLevel(world, stage);
-        } else {
+        } 
+        else 
+        {
             GameOver();
         }
     }

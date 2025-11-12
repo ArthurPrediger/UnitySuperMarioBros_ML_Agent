@@ -7,6 +7,9 @@ public class DeathBarrier : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            MarioAgent agent = other.gameObject.GetComponent<MarioAgent>();
+            agent.AddReward(-1f);
+            agent.EndEpisode();
             other.gameObject.SetActive(false);
             GameManager.Instance.ResetLevel(3f);
         }

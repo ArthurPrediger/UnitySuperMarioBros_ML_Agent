@@ -14,6 +14,7 @@ public class FlagPole : MonoBehaviour
     {
         if (other.CompareTag("Player") && other.TryGetComponent(out Player player))
         {
+            other.gameObject.GetComponent<MarioAgent>().AddReward(10f);
             StartCoroutine(MoveTo(flag, poleBottom.position));
             StartCoroutine(LevelCompleteSequence(player));
         }

@@ -8,11 +8,16 @@ public class Goomba : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player player))
         {
-            if (player.starpower) {
-                Hit();
-            } else if (collision.transform.DotTest(transform, Vector2.down)) {
+            if (player.starpower) 
+            {
+                Hit(collision.gameObject);
+            } 
+            else if (collision.transform.DotTest(transform, Vector2.down))
+            {
                 Flatten();
-            } else {
+            } 
+            else 
+            {
                 player.Hit();
             }
         }
@@ -20,8 +25,9 @@ public class Goomba : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Shell")) {
-            Hit();
+        if (other.gameObject.layer == LayerMask.NameToLayer("Shell")) 
+        {
+            Hit(other.gameObject);
         }
     }
 
@@ -34,8 +40,9 @@ public class Goomba : MonoBehaviour
         Destroy(gameObject, 0.5f);
     }
 
-    private void Hit()
+    private void Hit(GameObject player)
     {
+        player.gameObject.GetComponent<MarioAgent>().AddReward(0.5f);
         GetComponent<AnimatedSprite>().enabled = false;
         GetComponent<DeathAnimation>().enabled = true;
         Destroy(gameObject, 3f);
