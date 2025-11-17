@@ -85,9 +85,12 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Flip sprite to face direction
-        if (velocity.x > 0f) {
+        if (velocity.x > 0f) 
+        {
             transform.eulerAngles = Vector3.zero;
-        } else if (velocity.x < 0f) {
+        } 
+        else if (velocity.x < 0f) 
+        {
             transform.eulerAngles = new Vector3(0f, 180f, 0f);
         }
     }
@@ -136,5 +139,22 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
+    //private void OnCollisionStay2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.layer == LayerMask.NameToLayer("Default") && rb.Raycast(Vector2.down))
+    //    {
+    //        grounded = true;
+    //        jumping = false;
+    //    }
+    //}
+
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.layer == LayerMask.NameToLayer("Default"))
+    //    {
+    //        grounded = false;
+    //    }
+    //}
 
 }

@@ -7,12 +7,14 @@ public class Pipe : MonoBehaviour
     public KeyCode enterKeyCode = KeyCode.S;
     public Vector3 enterDirection = Vector3.down;
     public Vector3 exitDirection = Vector3.zero;
+    [SerializeField] private Transform exitPoint = null;
 
     private void OnTriggerStay2D(Collider2D other)
     {
         if (connection != null && other.CompareTag("Player"))
         {
-            if (Input.GetKey(enterKeyCode) && other.TryGetComponent(out Player player)) {
+            if (other.TryGetComponent(out Player player) && player.movement.tryingToEnterPipe) 
+            {
                 StartCoroutine(Enter(player));
             }
         }
@@ -40,6 +42,15 @@ public class Pipe : MonoBehaviour
         {
             player.transform.position = connection.position;
             player.transform.localScale = Vector3.one;
+        }
+
+        if(exitPoint != null)
+        {
+            player.movement.AddTarget(exitPoint, connection);
+        }
+        else
+        {
+            player.movement.RemoveLastTarget();
         }
 
         player.movement.enabled = true;

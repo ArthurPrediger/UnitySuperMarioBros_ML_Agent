@@ -7,15 +7,18 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     public int world { get; private set; } = 1;
-    public int stage { get; private set; } = 1;
+    public int stage { get; private set; } = 2;
     public int lives { get; private set; } = 3;
     public int coins { get; private set; } = 0;
 
     private void Awake()
     {
-        if (Instance != null) {
+        if (Instance != null)
+        {
             DestroyImmediate(gameObject);
-        } else {
+        } 
+        else 
+        {
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
@@ -39,7 +42,7 @@ public class GameManager : MonoBehaviour
         lives = 3;
         coins = 0;
 
-        LoadLevel(1, 1);
+        LoadLevel(1, 2);
     }
 
     public void GameOver()

@@ -15,7 +15,7 @@ public class PowerUp : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player") && other.TryGetComponent(out Player player)) {
-            other.gameObject.GetComponent<MarioAgent>().AddReward(0.5f);
+            other.gameObject.GetComponent<MarioAgent>().AddReward(5f);
             Collect(player);
         }
     }

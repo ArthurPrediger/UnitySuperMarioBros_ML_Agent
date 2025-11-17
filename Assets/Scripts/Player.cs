@@ -32,9 +32,11 @@ public class Player : MonoBehaviour
         {
             if (big) {
                 Shrink();
-                movement.AddReward(-0.5f);
-            } else {
                 movement.AddReward(-1f);
+            } 
+            else 
+            {
+                movement.AddReward(-2f);
                 Death();
             }
         }
@@ -45,6 +47,7 @@ public class Player : MonoBehaviour
         smallRenderer.enabled = false;
         bigRenderer.enabled = false;
         deathAnimation.enabled = true;
+        movement.EndEpisode();
 
         GameManager.Instance.ResetLevel(3f);
     }
