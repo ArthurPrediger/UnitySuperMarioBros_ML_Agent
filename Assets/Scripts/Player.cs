@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
         if (episodeTimer >= maxEpisodeTime)
         {
             Death();
+            enabled = false;
         }
     }
 
