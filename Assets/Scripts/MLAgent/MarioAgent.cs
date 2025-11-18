@@ -36,7 +36,7 @@ public class MarioAgent : Agent
     private bool jumpJustPressed = false;
     private float distanceToTarget = 0f;
 
-    [SerializeField] private List<Transform> agentTargets = new();
+    private List<Transform> agentTargets = new();
     private List<Transform> agentInitTrans = new();
     private List<float> curDistProgression = new();
     private readonly float distProgressionReward = 0.01f;
@@ -56,8 +56,12 @@ public class MarioAgent : Agent
         inputAxis = 0f;
         jumping = false;
         tryingToEnterPipe = false;
-        Vector2 curTarget = agentTargets.Last().position;
+
+        GameObject flagPole = GameObject.FindGameObjectWithTag("FinalGoal");
+
+        agentTargets.Add(flagPole.transform);
         agentInitTrans.Add(rb.transform);
+        Vector2 curTarget = agentTargets.Last().position;
         distanceToTarget = Vector3.Distance(agentInitTrans.Last().position, curTarget);
         maxTargetDist = distanceToTarget;
         curDistProgression.Add(distProgressionReward);
@@ -104,29 +108,25 @@ public class MarioAgent : Agent
         sensor.AddObservation(agentTargets.Last().position - agentInitTrans.Last().position);
         sensor.AddObservation(curDistProgression.Last());
 
-        // 6 raycasts (front, back, down, 3 diagonals)
-        float rayDistance = 4f;
-        sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.right, rayDistance, LayerMask.NameToLayer("Default")).distance);
-        sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.left, rayDistance, LayerMask.NameToLayer("Default")).distance);
-        sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.down, rayDistance, LayerMask.NameToLayer("Default")).distance);
-        sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(1, -1), rayDistance, LayerMask.NameToLayer("Default")).distance);
-        sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(-1, -1), rayDistance, LayerMask.NameToLayer("Default")).distance);
-        sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(1, 1), rayDistance, LayerMask.NameToLayer("Default")).distance);
+        // 6 raycasts (front, back, down, up, 4 diagonals)
+        float rayDistance = maxJumpHeight + 0.001f;
+        sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.right, rayDistance, LayerMask.GetMask("Default")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.left, rayDistance, LayerMask.GetMask("Default")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.down, rayDistance, LayerMask.GetMask("Default")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.up, rayDistance, LayerMask.GetMask("Default")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(1, 1), rayDistance, LayerMask.GetMask("Default")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(-1, 1), rayDistance, LayerMask.GetMask("Default")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(-1, -1), rayDistance, LayerMask.GetMask("Default")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(1, -1), rayDistance, LayerMask.GetMask("Default")).distance);
 
-        var hit = Physics2D.Raycast(rb.position, Vector2.down, rayDistance, LayerMask.NameToLayer("Default"));
-        Debug.DrawLine(rb.position, rb.position + Vector2.down * rayDistance);    
-        if(hit.collider)
-        {
-            Debug.Log(hit.collider.name);
-            Debug.Log(hit.distance);
-        }
-
-        //sensor.AddObservation(Physics2D.Raycast(transform.position, Vector2.right, rayDistance, LayerMask.NameToLayer("Enemy")).distance);
-        //sensor.AddObservation(Physics2D.Raycast(transform.position, Vector2.left, rayDistance, LayerMask.NameToLayer("Enemy")).distance);
-        //sensor.AddObservation(Physics2D.Raycast(transform.position, Vector2.down, rayDistance, LayerMask.NameToLayer("Enemy")).distance);
-        //sensor.AddObservation(Physics2D.Raycast(transform.position, new Vector2(1, -1), rayDistance, LayerMask.NameToLayer("Enemy")).distance);
-        //sensor.AddObservation(Physics2D.Raycast(transform.position, new Vector2(-1, -1), rayDistance, LayerMask.NameToLayer("Enemy")).distance);
-        //sensor.AddObservation(Physics2D.Raycast(transform.position, new Vector2(1, 1), rayDistance, LayerMask.NameToLayer("Enemy")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.right, rayDistance, LayerMask.GetMask("Enemy")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.left, rayDistance, LayerMask.GetMask("Enemy")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.down, rayDistance, LayerMask.GetMask("Enemy")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.up, rayDistance, LayerMask.GetMask("Enemy")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(1, 1), rayDistance, LayerMask.GetMask("Enemy")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(-1, 1), rayDistance, LayerMask.GetMask("Enemy")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(-1, -1), rayDistance, LayerMask.GetMask("Enemy")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(1, -1), rayDistance, LayerMask.GetMask("Enemy")).distance);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -244,8 +244,8 @@ public class MarioAgent : Agent
     {
         // Check if falling
         bool falling = velocity.y < 0f || !jumpPressed;
-        //multiplier = falling ? 2f : 1f;
-        multiplier = falling ? 1f : 1f;
+        multiplier = falling ? 2f : 1f;
+        //multiplier = falling ? 1f : 1f;
 
         // Apply gravity and terminal velocity
         velocity.y += gravity * multiplier * Time.deltaTime;

@@ -9215,7 +9215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 28
+    VectorObservationSize: 38
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -9251,8 +9251,6 @@ MonoBehaviour:
   moveSpeed: 8
   maxJumpHeight: 5
   maxJumpTime: 1
-  agentTargets:
-  - {fileID: 1678382933}
 --- !u!1001 &1703551332
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12396,6 +12394,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Flag Pole
       objectReference: {fileID: 0}
+    - target: {fileID: 2938452933781992816, guid: 0321727fc4f2a09458753c8f9f0ac24d, type: 3}
+      propertyPath: m_TagString
+      value: FinalGoal
+      objectReference: {fileID: 0}
     - target: {fileID: 2938452933781992817, guid: 0321727fc4f2a09458753c8f9f0ac24d, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -12444,6 +12446,10 @@ PrefabInstance:
       propertyPath: castle
       value: 
       objectReference: {fileID: 1768761168}
+    - target: {fileID: 2938452933781992828, guid: 0321727fc4f2a09458753c8f9f0ac24d, type: 3}
+      propertyPath: nextStage
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

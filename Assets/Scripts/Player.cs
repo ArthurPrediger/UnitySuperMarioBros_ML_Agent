@@ -17,6 +17,9 @@ public class Player : MonoBehaviour
     public bool dead => deathAnimation.enabled;
     public bool starpower { get; private set; }
 
+    private readonly float maxEpisodeTime = 900f;
+    private float episodeTimer = 0f;
+
     private void Awake()
     {
         capsuleCollider = GetComponent<CapsuleCollider2D>();
@@ -24,6 +27,18 @@ public class Player : MonoBehaviour
         movement = GetComponent<MarioAgent>();
         deathAnimation = GetComponent<DeathAnimation>();
         activeRenderer = smallRenderer;
+
+        episodeTimer = 0f;
+    }
+
+    private void Update()
+    {
+        episodeTimer += Time.deltaTime;
+
+        if (episodeTimer >= maxEpisodeTime)
+        {
+            Death();
+        }
     }
 
     public void Hit()
