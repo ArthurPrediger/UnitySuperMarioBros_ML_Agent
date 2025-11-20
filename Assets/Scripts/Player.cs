@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     public bool dead => deathAnimation.enabled;
     public bool starpower { get; private set; }
 
-    private readonly float maxEpisodeTime = 900f;
+    private readonly float maxEpisodeTime = 300f;
     private float episodeTimer = 0f;
 
     private void Awake()

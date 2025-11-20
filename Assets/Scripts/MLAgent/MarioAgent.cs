@@ -42,6 +42,8 @@ public class MarioAgent : Agent
     private readonly float distProgressionReward = 0.01f;
     private float maxTargetDist;
 
+    private static bool canEnterPipes = true;
+
     private void Awake()
     {
         mainCamera = Camera.main;
@@ -57,14 +59,17 @@ public class MarioAgent : Agent
         jumping = false;
         tryingToEnterPipe = false;
 
-        GameObject flagPole = GameObject.FindGameObjectWithTag("FinalGoal");
+        GameObject flagPoleTop = GameObject.FindGameObjectWithTag("FinalGoal");
 
-        agentTargets.Add(flagPole.transform);
+        agentTargets.Add(flagPoleTop.transform);
         agentInitTrans.Add(rb.transform);
         Vector2 curTarget = agentTargets.Last().position;
         distanceToTarget = Vector3.Distance(agentInitTrans.Last().position, curTarget);
         maxTargetDist = distanceToTarget;
         curDistProgression.Add(distProgressionReward);
+
+        canEnterPipes = !canEnterPipes;
+        Debug.Log("Can enter pipes: " + canEnterPipes);
     }
 
     public override void OnEpisodeBegin()
@@ -92,7 +97,7 @@ public class MarioAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        // 18 observations
+        // 41 observations
         sensor.AddObservation(rb.position);
         sensor.AddObservation(velocity);
         sensor.AddObservation(grounded);
@@ -107,12 +112,16 @@ public class MarioAgent : Agent
         sensor.AddObservation(agentInitTrans.Last().position);
         sensor.AddObservation(agentTargets.Last().position - agentInitTrans.Last().position);
         sensor.AddObservation(curDistProgression.Last());
+        //sensor.AddObservation(canEnterPipes);
+        sensor.AddObservation(tryingToEnterPipe);
 
-        // 6 raycasts (front, back, down, up, 4 diagonals)
+        // 25 raycasts (front, back, down, up, 4 diagonals)
         float rayDistance = maxJumpHeight + 0.001f;
+        Vector2 offset = rb.transform.forward;
         sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.right, rayDistance, LayerMask.GetMask("Default")).distance);
         sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.left, rayDistance, LayerMask.GetMask("Default")).distance);
         sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.down, rayDistance, LayerMask.GetMask("Default")).distance);
+        sensor.AddObservation(Physics2D.Raycast(rb.position + offset, Vector2.down, rayDistance, LayerMask.GetMask("Default")).distance);
         sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.up, rayDistance, LayerMask.GetMask("Default")).distance);
         sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(1, 1), rayDistance, LayerMask.GetMask("Default")).distance);
         sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(-1, 1), rayDistance, LayerMask.GetMask("Default")).distance);
@@ -127,17 +136,26 @@ public class MarioAgent : Agent
         sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(-1, 1), rayDistance, LayerMask.GetMask("Enemy")).distance);
         sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(-1, -1), rayDistance, LayerMask.GetMask("Enemy")).distance);
         sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(1, -1), rayDistance, LayerMask.GetMask("Enemy")).distance);
+
+        //sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.right, rayDistance, LayerMask.GetMask("PowerUp")).distance);
+        //sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.left, rayDistance, LayerMask.GetMask("PowerUp")).distance);
+        //sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.down, rayDistance, LayerMask.GetMask("PowerUp")).distance);
+        //sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.up, rayDistance, LayerMask.GetMask("PowerUp")).distance);
+        //sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(1, 1), rayDistance, LayerMask.GetMask("PowerUp")).distance);
+        //sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(-1, 1), rayDistance, LayerMask.GetMask("PowerUp")).distance);
+        //sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(-1, -1), rayDistance, LayerMask.GetMask("PowerUp")).distance);
+        //sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(1, -1), rayDistance, LayerMask.GetMask("PowerUp")).distance);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
         int move = actions.DiscreteActions[0]; // 0,1,2
         int jump = actions.DiscreteActions[1]; // 0,1
-        int enterPipe = actions.DiscreteActions[2]; // 0,1
+        int tryingEnter = canEnterPipes ? actions.DiscreteActions[2] : 0; // 0,1
 
         inputAxis = axis[move];
 
-        tryingToEnterPipe = enterPipe == 1;
+        tryingToEnterPipe = tryingEnter == 1;
 
         if(jump == 1 && !jumpJustPressed && !jumpPressed)
         {
@@ -169,8 +187,8 @@ public class MarioAgent : Agent
                 AddReward(2f);
             else
                 AddReward(0.1f);
-            Debug.Log("Reward for " + (curDistProgression.Last() * 100f).ToString() + 
-                "% of the progression distance for the current target.");
+            //Debug.Log("Reward for " + (curDistProgression.Last() * 100f).ToString() + 
+            //    "% of the progression distance for the current target.");
             curDistProgression[^1] += distProgressionReward;
         }
     }

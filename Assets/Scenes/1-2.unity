@@ -5326,7 +5326,7 @@ GameObject:
   - component: {fileID: 981988531}
   - component: {fileID: 981988533}
   - component: {fileID: 981988532}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Death Barrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9215,7 +9215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 38
+    VectorObservationSize: 40
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -12393,10 +12393,6 @@ PrefabInstance:
     - target: {fileID: 2938452933781992816, guid: 0321727fc4f2a09458753c8f9f0ac24d, type: 3}
       propertyPath: m_Name
       value: Flag Pole
-      objectReference: {fileID: 0}
-    - target: {fileID: 2938452933781992816, guid: 0321727fc4f2a09458753c8f9f0ac24d, type: 3}
-      propertyPath: m_TagString
-      value: FinalGoal
       objectReference: {fileID: 0}
     - target: {fileID: 2938452933781992817, guid: 0321727fc4f2a09458753c8f9f0ac24d, type: 3}
       propertyPath: m_RootOrder
