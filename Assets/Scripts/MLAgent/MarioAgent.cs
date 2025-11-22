@@ -42,7 +42,7 @@ public class MarioAgent : Agent
     private readonly float distProgressionReward = 0.01f;
     private float maxTargetDist;
 
-    private static bool canEnterPipes = true;
+    //private static bool canEnterPipes = true;
 
     private void Awake()
     {
@@ -63,13 +63,13 @@ public class MarioAgent : Agent
 
         agentTargets.Add(flagPoleTop.transform);
         agentInitTrans.Add(rb.transform);
-        Vector2 curTarget = agentTargets.Last().position;
-        distanceToTarget = Vector3.Distance(agentInitTrans.Last().position, curTarget);
+        Vector3 curTarget = agentTargets.Last().position;
+        distanceToTarget = Vector2.Distance(agentInitTrans.Last().position, curTarget);
         maxTargetDist = distanceToTarget;
         curDistProgression.Add(distProgressionReward);
 
-        canEnterPipes = !canEnterPipes;
-        Debug.Log("Can enter pipes: " + canEnterPipes);
+        //canEnterPipes = !canEnterPipes;
+        //Debug.Log("Can enter pipes: " + canEnterPipes);
     }
 
     public override void OnEpisodeBegin()
@@ -97,7 +97,7 @@ public class MarioAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        // 41 observations
+        // 33 observations
         sensor.AddObservation(rb.position);
         sensor.AddObservation(velocity);
         sensor.AddObservation(grounded);
@@ -105,24 +105,26 @@ public class MarioAgent : Agent
         sensor.AddObservation(running);
         sensor.AddObservation(sliding);
         sensor.AddObservation(falling);
-        sensor.AddObservation(jumpJustPressed);
-        sensor.AddObservation(jumpPressed);
+        //sensor.AddObservation(jumpJustPressed);
+        //sensor.AddObservation(jumpPressed);
         sensor.AddObservation(multiplier);
-        sensor.AddObservation(agentTargets.Last().position);
-        sensor.AddObservation(agentInitTrans.Last().position);
-        sensor.AddObservation(agentTargets.Last().position - agentInitTrans.Last().position);
+        Vector2 agentTargetPos = agentTargets.Last().position;
+        sensor.AddObservation(agentTargetPos);
+        Vector2 agentInitPos = agentInitTrans.Last().position;
+        sensor.AddObservation(agentInitPos);
+        sensor.AddObservation(agentTargetPos - rb.position);
         sensor.AddObservation(curDistProgression.Last());
         //sensor.AddObservation(canEnterPipes);
-        sensor.AddObservation(tryingToEnterPipe);
+        //sensor.AddObservation(tryingToEnterPipe);
 
         // 25 raycasts (front, back, down, up, 4 diagonals)
         float rayDistance = maxJumpHeight + 0.001f;
-        Vector2 offset = rb.transform.forward;
+        //Vector2 offset = new (Mathf.Sign(velocity.x), 0f);
         sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.right, rayDistance, LayerMask.GetMask("Default")).distance);
         sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.left, rayDistance, LayerMask.GetMask("Default")).distance);
         sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.down, rayDistance, LayerMask.GetMask("Default")).distance);
-        sensor.AddObservation(Physics2D.Raycast(rb.position + offset, Vector2.down, rayDistance, LayerMask.GetMask("Default")).distance);
         sensor.AddObservation(Physics2D.Raycast(rb.position, Vector2.up, rayDistance, LayerMask.GetMask("Default")).distance);
+        //sensor.AddObservation(Physics2D.Raycast(rb.position + offset, Vector2.up, rayDistance, LayerMask.GetMask("Default")).distance);
         sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(1, 1), rayDistance, LayerMask.GetMask("Default")).distance);
         sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(-1, 1), rayDistance, LayerMask.GetMask("Default")).distance);
         sensor.AddObservation(Physics2D.Raycast(rb.position, new Vector2(-1, -1), rayDistance, LayerMask.GetMask("Default")).distance);
@@ -151,7 +153,8 @@ public class MarioAgent : Agent
     {
         int move = actions.DiscreteActions[0]; // 0,1,2
         int jump = actions.DiscreteActions[1]; // 0,1
-        int tryingEnter = canEnterPipes ? actions.DiscreteActions[2] : 0; // 0,1
+        //int tryingEnter = canEnterPipes ? actions.DiscreteActions[2] : 0; // 0,1
+        int tryingEnter = actions.DiscreteActions[2]; // 0,1
 
         inputAxis = axis[move];
 
@@ -178,7 +181,6 @@ public class MarioAgent : Agent
         // Reward for forward movement
         Vector2 curTarget = agentTargets.Last().position;
         distanceToTarget = Vector2.Distance(rb.position, curTarget);
-        //Debug.Log(distanceToTarget);
         float normalizedDistProgression = (maxTargetDist - distanceToTarget) / maxTargetDist;
 
         while (normalizedDistProgression > curDistProgression.Last())
@@ -187,8 +189,8 @@ public class MarioAgent : Agent
                 AddReward(2f);
             else
                 AddReward(0.1f);
-            //Debug.Log("Reward for " + (curDistProgression.Last() * 100f).ToString() + 
-            //    "% of the progression distance for the current target.");
+            Debug.Log("Reward for " + (curDistProgression.Last() * 100f).ToString() + 
+                "% of the progression distance for the current target.");
             curDistProgression[^1] += distProgressionReward;
         }
     }
