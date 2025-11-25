@@ -1,0 +1,56 @@
+{
+    "MarioAgent": {
+        "checkpoints": [
+            {
+                "steps": 7099981,
+                "file_path": "results\\mario4\\MarioAgent\\MarioAgent-7099981.onnx",
+                "reward": 253.7423738501966,
+                "creation_time": 1764069271.9891005,
+                "auxillary_file_paths": [
+                    "results\\mario4\\MarioAgent\\MarioAgent-7099981.pt"
+                ]
+            },
+            {
+                "steps": 7199947,
+                "file_path": "results\\mario4\\MarioAgent\\MarioAgent-7199947.onnx",
+                "reward": 639.4385011196136,
+                "creation_time": 1764071653.0689273,
+                "auxillary_file_paths": [
+                    "results\\mario4\\MarioAgent\\MarioAgent-7199947.pt"
+                ]
+            },
+            {
+                "steps": 7299967,
+                "file_path": "results\\mario4\\MarioAgent\\MarioAgent-7299967.onnx",
+                "reward": 423.3292247833063,
+                "creation_time": 1764073840.1776955,
+                "auxillary_file_paths": [
+                    "results\\mario4\\MarioAgent\\MarioAgent-7299967.pt"
+                ]
+            },
+            {
+                "steps": 7307307,
+                "file_path": "results\\mario4\\MarioAgent\\MarioAgent-7307307.onnx",
+                "reward": 1194.4429873228073,
+                "creation_time": 1764074026.0523326,
+                "auxillary_file_paths": [
+                    "results\\mario4\\MarioAgent\\MarioAgent-7307307.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 7307307,
+            "file_path": "results\\mario4\\MarioAgent.onnx",
+            "reward": 1194.4429873228073,
+            "creation_time": 1764074026.0523326,
+            "auxillary_file_paths": [
+                "results\\mario4\\MarioAgent\\MarioAgent-7307307.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

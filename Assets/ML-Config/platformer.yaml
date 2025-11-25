@@ -19,7 +19,7 @@ behaviors:
       extrinsic:
         gamma: 0.995
         strength: 1.0
-    max_steps: 5000000
+    max_steps: 16000000
     time_horizon: 64
     summary_freq: 20000
     checkpoint_interval: 100000
