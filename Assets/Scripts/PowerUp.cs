@@ -14,8 +14,8 @@ public class PowerUp : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && other.TryGetComponent(out Player player)) {
-            other.gameObject.GetComponent<MarioAgent>().AddReward(5f);
+        if (other.CompareTag("Player") && other.TryGetComponent(out Player player)) 
+        {
             Collect(player);
         }
     }
@@ -33,10 +33,12 @@ public class PowerUp : MonoBehaviour
                 break;
 
             case Type.MagicMushroom:
+                GameManager.Instance.AddAgentReward(1f);
                 player.Grow();
                 break;
 
             case Type.Starpower:
+                GameManager.Instance.AddAgentReward(1f);
                 player.Starpower();
                 break;
         }

@@ -1,3 +1,4 @@
+using Unity.MLAgents;
 using UnityEngine;
 
 public class Koopa : MonoBehaviour
@@ -14,7 +15,6 @@ public class Koopa : MonoBehaviour
         {
             if (player.starpower) 
             {
-                player.movement.AddReward(0.5f);
                 Hit();
             }
             else if (collision.transform.DotTest(transform, Vector2.down)) 
@@ -41,7 +41,6 @@ public class Koopa : MonoBehaviour
             {
                 if (player.starpower) 
                 {
-                    player.movement.AddReward(0.5f);
                     Hit();
                 } 
                 else 
@@ -81,6 +80,7 @@ public class Koopa : MonoBehaviour
 
     private void Hit()
     {
+        GameManager.Instance.AddAgentReward(1f);
         GetComponent<AnimatedSprite>().enabled = false;
         GetComponent<DeathAnimation>().enabled = true;
         Destroy(gameObject, 3f);

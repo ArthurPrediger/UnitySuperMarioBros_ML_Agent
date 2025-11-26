@@ -7516,7 +7516,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1378025864}
   m_Layer: 0
-  m_Name: ExitPoint
+  m_Name: UndergroundExitPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9215,7 +9215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 33
+    VectorObservationSize: 34
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -12446,6 +12446,10 @@ PrefabInstance:
       propertyPath: nextStage
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6045702314974880118, guid: 0321727fc4f2a09458753c8f9f0ac24d, type: 3}
+      propertyPath: m_Name
+      value: FlagTarget
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12507,6 +12511,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4399478865317670441, guid: ed187b71a97bea840801d7d397bb47b7, type: 3}
+      propertyPath: exitPoint
+      value: 
+      objectReference: {fileID: 1378025864}
     - target: {fileID: 4399478865317670441, guid: ed187b71a97bea840801d7d397bb47b7, type: 3}
       propertyPath: connection
       value: 

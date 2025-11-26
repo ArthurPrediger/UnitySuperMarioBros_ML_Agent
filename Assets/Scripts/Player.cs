@@ -46,13 +46,14 @@ public class Player : MonoBehaviour
     {
         if (!dead && !starpower)
         {
-            if (big) {
+            if (big) 
+            {
                 Shrink();
                 movement.AddReward(-1f);
             } 
             else 
             {
-                movement.AddReward(-2f);
+                movement.AddReward(-5f);
                 Death();
             }
         }

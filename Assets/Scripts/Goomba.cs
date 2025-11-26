@@ -11,13 +11,12 @@ public class Goomba : MonoBehaviour
         {
             if (player.starpower) 
             {
-                player.movement.AddReward(0.5f);
                 Hit();
             } 
             else if (collision.transform.DotTest(transform, Vector2.down))
             {
                 Flatten();
-            } 
+            }
             else 
             {
                 player.Hit();
@@ -35,6 +34,7 @@ public class Goomba : MonoBehaviour
 
     private void Flatten()
     {
+        GameManager.Instance.AddAgentReward(1f);
         GetComponent<Collider2D>().enabled = false;
         GetComponent<EntityMovement>().enabled = false;
         GetComponent<AnimatedSprite>().enabled = false;
@@ -44,6 +44,7 @@ public class Goomba : MonoBehaviour
 
     private void Hit()
     {
+        GameManager.Instance.AddAgentReward(1f);
         GetComponent<AnimatedSprite>().enabled = false;
         GetComponent<DeathAnimation>().enabled = true;
         Destroy(gameObject, 3f);

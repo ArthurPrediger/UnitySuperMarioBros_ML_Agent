@@ -310,7 +310,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9006227029136260493}
   m_Layer: 2
-  m_Name: Target
+  m_Name: FlagTarget
   m_TagString: FinalGoal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

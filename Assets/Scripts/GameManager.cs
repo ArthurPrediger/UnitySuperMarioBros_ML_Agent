@@ -11,22 +11,28 @@ public class GameManager : MonoBehaviour
     public int lives { get; private set; } = 3;
     public int coins { get; private set; } = 0;
 
+    private MarioAgent agent;
+
     private void Awake()
     {
         if (Instance != null)
         {
             DestroyImmediate(gameObject);
-        } 
-        else 
+        }
+        else
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
+
+        agent = FindObjectOfType<MarioAgent>();
+        Debug.Log(agent.name);
     }
 
     private void OnDestroy()
     {
-        if (Instance == this) {
+        if (Instance == this)
+        {
             Instance = null;
         }
     }
@@ -73,11 +79,11 @@ public class GameManager : MonoBehaviour
     {
         lives--;
 
-        if (lives > 0) 
+        if (lives > 0)
         {
             LoadLevel(world, stage);
-        } 
-        else 
+        }
+        else
         {
             GameOver();
         }
@@ -86,6 +92,8 @@ public class GameManager : MonoBehaviour
     public void AddCoin()
     {
         coins++;
+
+        AddAgentReward(1f);
 
         if (coins == 100)
         {
@@ -96,7 +104,15 @@ public class GameManager : MonoBehaviour
 
     public void AddLife()
     {
+        AddAgentReward(2f);
         lives++;
     }
 
+    public void AddAgentReward(float reward)
+    {
+        if (agent)
+        {
+            agent.AddReward(reward);
+        }
+    }
 }

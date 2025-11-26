@@ -42,7 +42,7 @@ public class MarioAgent : Agent
     private readonly float distProgressionReward = 0.01f;
     private float maxTargetDist;
 
-    //private static bool canEnterPipes = true;
+    private static bool canAccessUnderground = true;
 
     private void Awake()
     {
@@ -68,8 +68,8 @@ public class MarioAgent : Agent
         maxTargetDist = distanceToTarget;
         curDistProgression.Add(distProgressionReward);
 
-        //canEnterPipes = !canEnterPipes;
-        //Debug.Log("Can enter pipes: " + canEnterPipes);
+        canAccessUnderground = !canAccessUnderground;
+        Debug.Log("Can access underground: " + canAccessUnderground);
     }
 
     public override void OnEpisodeBegin()
@@ -97,7 +97,7 @@ public class MarioAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        // 33 observations
+        // 34 observations
         sensor.AddObservation(rb.position);
         sensor.AddObservation(velocity);
         sensor.AddObservation(grounded);
@@ -114,7 +114,7 @@ public class MarioAgent : Agent
         sensor.AddObservation(agentInitPos);
         sensor.AddObservation(agentTargetPos - rb.position);
         sensor.AddObservation(curDistProgression.Last());
-        //sensor.AddObservation(canEnterPipes);
+        sensor.AddObservation(canAccessUnderground);
         //sensor.AddObservation(tryingToEnterPipe);
 
         // 25 raycasts (front, back, down, up, 4 diagonals)
@@ -153,8 +153,8 @@ public class MarioAgent : Agent
     {
         int move = actions.DiscreteActions[0]; // 0,1,2
         int jump = actions.DiscreteActions[1]; // 0,1
-        //int tryingEnter = canEnterPipes ? actions.DiscreteActions[2] : 0; // 0,1
-        int tryingEnter = actions.DiscreteActions[2]; // 0,1
+        int tryingEnter = canAccessUnderground ? actions.DiscreteActions[2] : 0; // 0,1
+        //int tryingEnter = actions.DiscreteActions[2]; // 0,1
 
         inputAxis = axis[move];
 
@@ -190,7 +190,7 @@ public class MarioAgent : Agent
             else
                 AddReward(0.1f);
             Debug.Log("Reward for " + (curDistProgression.Last() * 100f).ToString() + 
-                "% of the progression distance for the current target.");
+                "% of the progression distance for the target: " + agentTargets.Last().name + ".");
             curDistProgression[^1] += distProgressionReward;
         }
     }
