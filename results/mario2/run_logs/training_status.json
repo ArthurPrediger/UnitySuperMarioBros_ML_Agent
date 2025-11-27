@@ -1,0 +1,56 @@
+{
+    "MarioAgent": {
+        "checkpoints": [
+            {
+                "steps": 699984,
+                "file_path": "results\\mario2\\MarioAgent\\MarioAgent-699984.onnx",
+                "reward": null,
+                "creation_time": 1764212277.5616665,
+                "auxillary_file_paths": [
+                    "results\\mario2\\MarioAgent\\MarioAgent-699984.pt"
+                ]
+            },
+            {
+                "steps": 799995,
+                "file_path": "results\\mario2\\MarioAgent\\MarioAgent-799995.onnx",
+                "reward": 44.45935954763131,
+                "creation_time": 1764214396.1405072,
+                "auxillary_file_paths": [
+                    "results\\mario2\\MarioAgent\\MarioAgent-799995.pt"
+                ]
+            },
+            {
+                "steps": 899938,
+                "file_path": "results\\mario2\\MarioAgent\\MarioAgent-899938.onnx",
+                "reward": null,
+                "creation_time": 1764216473.9608655,
+                "auxillary_file_paths": [
+                    "results\\mario2\\MarioAgent\\MarioAgent-899938.pt"
+                ]
+            },
+            {
+                "steps": 968110,
+                "file_path": "results\\mario2\\MarioAgent\\MarioAgent-968110.onnx",
+                "reward": 30.71621961912347,
+                "creation_time": 1764217917.7110355,
+                "auxillary_file_paths": [
+                    "results\\mario2\\MarioAgent\\MarioAgent-968110.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 968110,
+            "file_path": "results\\mario2\\MarioAgent.onnx",
+            "reward": 30.71621961912347,
+            "creation_time": 1764217917.7110355,
+            "auxillary_file_paths": [
+                "results\\mario2\\MarioAgent\\MarioAgent-968110.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

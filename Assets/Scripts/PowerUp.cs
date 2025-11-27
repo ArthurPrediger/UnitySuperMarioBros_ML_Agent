@@ -33,12 +33,10 @@ public class PowerUp : MonoBehaviour
                 break;
 
             case Type.MagicMushroom:
-                GameManager.Instance.AddAgentReward(1f);
                 player.Grow();
                 break;
 
             case Type.Starpower:
-                GameManager.Instance.AddAgentReward(1f);
                 player.Starpower();
                 break;
         }

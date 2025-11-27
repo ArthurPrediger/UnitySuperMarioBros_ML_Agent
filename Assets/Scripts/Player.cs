@@ -71,6 +71,8 @@ public class Player : MonoBehaviour
 
     public void Grow()
     {
+        if(!big)
+            movement.AddReward(1f);
         smallRenderer.enabled = false;
         bigRenderer.enabled = true;
         activeRenderer = bigRenderer;
@@ -118,6 +120,7 @@ public class Player : MonoBehaviour
 
     public void Starpower()
     {
+        movement.AddReward(1f);
         StartCoroutine(StarpowerAnimation());
     }
 

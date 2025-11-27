@@ -25,8 +25,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
 
-        agent = FindObjectOfType<MarioAgent>();
-        Debug.Log(agent.name);
+        agent = GameObject.FindGameObjectWithTag("Player")?.GetComponent<MarioAgent>();
     }
 
     private void OnDestroy()
