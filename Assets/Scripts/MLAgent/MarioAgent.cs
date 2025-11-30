@@ -42,7 +42,7 @@ public class MarioAgent : Agent
     private List<float> curDistProgression = new();
     private readonly float distProgressionReward = 0.01f;
     private float maxTargetDist;
-
+    float normalizedDistProgression = 0f;
     //private static bool canAccessUnderground = true;
 
     private void Awake()
@@ -116,7 +116,7 @@ public class MarioAgent : Agent
         sensor.AddObservation(agentInitPos);
         Vector2 diff = (agentTargetPos - rb.position);
         sensor.AddObservation(diff);
-        sensor.AddObservation(curDistProgression.Last());
+        sensor.AddObservation(normalizedDistProgression);
         //sensor.AddObservation(canAccessUnderground);
         //sensor.AddObservation(tryingToEnterPipe);
 
@@ -184,9 +184,9 @@ public class MarioAgent : Agent
         // Reward for forward movement
         Vector2 curTarget = agentTargets.Last().position;
         distanceToTarget = Vector2.Distance(rb.position, curTarget);
-        float normalizedDistProgression = (maxTargetDist - distanceToTarget) / maxTargetDist;
+        normalizedDistProgression = (maxTargetDist - distanceToTarget) / maxTargetDist;
 
-        while (normalizedDistProgression > curDistProgression.Last())
+        while (normalizedDistProgression >= curDistProgression.Last())
         {
             if(agentTargets.Count == 1)
                 AddReward(2f);
