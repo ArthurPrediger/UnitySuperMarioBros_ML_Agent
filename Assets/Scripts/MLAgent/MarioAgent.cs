@@ -186,7 +186,7 @@ public class MarioAgent : Agent
         distanceToTarget = Vector2.Distance(rb.position, curTarget);
         normalizedDistProgression = (maxTargetDist - distanceToTarget) / maxTargetDist;
 
-        while (normalizedDistProgression >= curDistProgression.Last())
+        while (!player.dead && normalizedDistProgression >= curDistProgression.Last())
         {
             if(agentTargets.Count == 1)
                 AddReward(2f);

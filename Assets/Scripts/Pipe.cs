@@ -13,7 +13,7 @@ public class Pipe : MonoBehaviour
     {
         if (connection != null && other.CompareTag("Player"))
         {
-            if (other.TryGetComponent(out Player player) && player.movement.tryingToEnterPipe) 
+            if (other.TryGetComponent(out Player player) && player.movement.enabled && player.movement.tryingToEnterPipe) 
             {
                 StartCoroutine(Enter(player));
             }
