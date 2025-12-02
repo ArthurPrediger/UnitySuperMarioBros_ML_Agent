@@ -2,49 +2,49 @@
     "MarioAgent": {
         "checkpoints": [
             {
-                "steps": 4999945,
-                "file_path": "results\\mario1\\MarioAgent\\MarioAgent-4999945.onnx",
-                "reward": null,
-                "creation_time": 1764481054.6276264,
+                "steps": 9999998,
+                "file_path": "results\\mario1\\MarioAgent\\MarioAgent-9999998.onnx",
+                "reward": 217.98000489609936,
+                "creation_time": 1764640848.83633,
                 "auxillary_file_paths": [
-                    "results\\mario1\\MarioAgent\\MarioAgent-4999945.pt"
+                    "results\\mario1\\MarioAgent\\MarioAgent-9999998.pt"
                 ]
             },
             {
-                "steps": 5099975,
-                "file_path": "results\\mario1\\MarioAgent\\MarioAgent-5099975.onnx",
-                "reward": 32.871996968363725,
-                "creation_time": 1764483165.3644512,
+                "steps": 10099993,
+                "file_path": "results\\mario1\\MarioAgent\\MarioAgent-10099993.onnx",
+                "reward": 967.9254016175867,
+                "creation_time": 1764643151.0281072,
                 "auxillary_file_paths": [
-                    "results\\mario1\\MarioAgent\\MarioAgent-5099975.pt"
+                    "results\\mario1\\MarioAgent\\MarioAgent-10099993.pt"
                 ]
             },
             {
-                "steps": 5199996,
-                "file_path": "results\\mario1\\MarioAgent\\MarioAgent-5199996.onnx",
-                "reward": 165.77010690441563,
-                "creation_time": 1764485305.7982125,
+                "steps": 10199969,
+                "file_path": "results\\mario1\\MarioAgent\\MarioAgent-10199969.onnx",
+                "reward": 253.86934922394508,
+                "creation_time": 1764645437.2439268,
                 "auxillary_file_paths": [
-                    "results\\mario1\\MarioAgent\\MarioAgent-5199996.pt"
+                    "results\\mario1\\MarioAgent\\MarioAgent-10199969.pt"
                 ]
             },
             {
-                "steps": 5204328,
-                "file_path": "results\\mario1\\MarioAgent\\MarioAgent-5204328.onnx",
-                "reward": 266.84259521203734,
-                "creation_time": 1764485403.91843,
+                "steps": 10221016,
+                "file_path": "results\\mario1\\MarioAgent\\MarioAgent-10221016.onnx",
+                "reward": 328.1615380655974,
+                "creation_time": 1764645929.369259,
                 "auxillary_file_paths": [
-                    "results\\mario1\\MarioAgent\\MarioAgent-5204328.pt"
+                    "results\\mario1\\MarioAgent\\MarioAgent-10221016.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 5204328,
+            "steps": 10221016,
             "file_path": "results\\mario1\\MarioAgent.onnx",
-            "reward": 266.84259521203734,
-            "creation_time": 1764485403.91843,
+            "reward": 328.1615380655974,
+            "creation_time": 1764645929.369259,
             "auxillary_file_paths": [
-                "results\\mario1\\MarioAgent\\MarioAgent-5204328.pt"
+                "results\\mario1\\MarioAgent\\MarioAgent-10221016.pt"
             ]
         }
     },

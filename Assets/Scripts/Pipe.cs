@@ -8,13 +8,15 @@ public class Pipe : MonoBehaviour
     public Vector3 enterDirection = Vector3.down;
     public Vector3 exitDirection = Vector3.zero;
     [SerializeField] private Transform exitPoint = null;
+    private bool coroutineRunning = false;
 
     private void OnTriggerStay2D(Collider2D other)
     {
         if (connection != null && other.CompareTag("Player"))
         {
-            if (other.TryGetComponent(out Player player) && player.movement.enabled && player.movement.tryingToEnterPipe) 
+            if (!coroutineRunning && other.TryGetComponent(out Player player) && player.movement.tryingToEnterPipe) 
             {
+                coroutineRunning = true;
                 StartCoroutine(Enter(player));
             }
         }
@@ -54,6 +56,7 @@ public class Pipe : MonoBehaviour
         }
 
         player.movement.enabled = true;
+        coroutineRunning = false;
     }
 
     private IEnumerator Move(Transform player, Vector3 endPosition, Vector3 endScale)
